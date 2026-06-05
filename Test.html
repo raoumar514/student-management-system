@@ -1,151 +1,158 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Test</title>
-</head>
-<body>
-  <main>
-    <section>
-      <div>
-        <label for="studentInput">Name</label>
-        <input type="text"  id="studentInput">
-      </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test</title>
+  </head>
+  <body>
+    <main>
+      <section>
+        <div>
+          <label for="studentInput">Name</label>
+          <input type="text" id="studentInput" />
+        </div>
 
-      <div>
-        <label for="fatherInput">Father Name</label>
-        <input type="text"  id="fatherInput">
-      </div>
+        <div>
+          <label for="fatherInput">Father Name</label>
+          <input type="text" id="fatherInput" />
+        </div>
 
-      <button id="submitBtn">Add</button>
-    </section>
+        <button id="submitBtn">Add</button>
+      </section>
 
-    <section style="display: flex; gap: 30px;">
-      <div>
-        <h2>Student Names</h2>
-        <ul id="studentList"></ul>
-      </div>
+      <section style="display: flex; gap: 30px">
+        <div>
+          <h2>Student Names</h2>
+          <ul id="studentList"></ul>
+        </div>
 
-      <div>
-        <h2>Father Names</h2>
-        <ul id="fatherList"></ul>
-      </div>
+        <div>
+          <h2>Father Names</h2>
+          <ul id="fatherList"></ul>
+        </div>
 
-      <div>
-        <h2>Actions</h2>
-        <ul id="actionsList"></ul>
-      </div>
-    </section>
-  </main>
+        <div>
+          <h2>Actions</h2>
+          <ul id="actionsList"></ul>
+        </div>
+      </section>
+    </main>
 
-  <script>
-    const studentInput = document.getElementById("studentInput");
-    const fatherInput = document.getElementById("fatherInput");
-    const submitBtn = document.getElementById("submitBtn");
-    const studentList = document.getElementById("studentList");
-    const fatherList = document.getElementById("fatherList");
-    const actionsList = document.getElementById("actionsList");
+    <script>
+      const studentInput = document.getElementById("studentInput");
+      const fatherInput = document.getElementById("fatherInput");
+      const submitBtn = document.getElementById("submitBtn");
+      const studentList = document.getElementById("studentList");
+      const fatherList = document.getElementById("fatherList");
+      const actionsList = document.getElementById("actionsList");
 
-    let isEditMode = false;
-    let currentStudentItem = null;
-    let currentFatherItem = null;
+      let isEditMode = false;
+      let currentStudentItem = null;
+      let currentFatherItem = null;
 
-    submitBtn.addEventListener("click", handleSubmit);
+      submitBtn.addEventListener("click", handleSubmit);
 
-    function handleSubmit(){
-      let studentValue = studentInput.value.trim();
-      let fatherValue = fatherInput.value.trim();
+      function handleSubmit() {
+        let studentValue = studentInput.value.trim();
+        let fatherValue = fatherInput.value.trim();
 
-      let hasEmptyField = !studentValue || !fatherValue;
-      if(hasEmptyField){
-        alert("input fields cannot be empty");
-        return;
+        let hasEmptyField = !studentValue || !fatherValue;
+        if (hasEmptyField) {
+          alert("input fields cannot be empty");
+          return;
+        }
+
+        const regex = /^[a-zA-Z]+$/;
+        if (!regex.test(studentValue) || !regex.test(fatherValue)) {
+          alert("only enlgish letters are allowed.");
+          return;
+        }
+
+        if (isEditMode) {
+          updateRecord(studentValue, fatherValue);
+        } else {
+          createRecord(studentValue, fatherValue);
+        }
+
+        clearInputs();
       }
 
-      if(isEditMode){
-        updateRecord(studentValue,fatherValue);
-      }
-      else{
-        createRecord(studentValue,fatherValue);
-      }
-
-      clearInputs();
-    }
-
-
-    function createRecord (studentValue,fatherValue){
+      function createRecord(studentValue, fatherValue) {
         let studentItem = document.createElement("li");
         let fatherItem = document.createElement("li");
         studentItem.textContent = studentValue;
-        fatherItem.textContent = fatherValue
+        fatherItem.textContent = fatherValue;
 
         let editBtn = document.createElement("button");
-        editBtn.textContent="Edit";
+        editBtn.textContent = "Edit";
         let deleteBtn = document.createElement("button");
         deleteBtn.textContent = "delete";
 
         let lineBreak = document.createElement("br");
 
-        editBtn.addEventListener("click", ()=>{
-          enableEditMode(studentItem,fatherItem)
-        })
+        editBtn.addEventListener("click", () => {
+          enableEditMode(studentItem, fatherItem);
+        });
 
-        deleteBtn.addEventListener("click", ()=>{
-          deleteRecord(studentItem,fatherItem,deleteBtn,editBtn,lineBreak)
-        })
+        deleteBtn.addEventListener("click", () => {
+          deleteRecord(studentItem, fatherItem, deleteBtn, editBtn, lineBreak);
+        });
 
         studentList.appendChild(studentItem);
         fatherList.appendChild(fatherItem);
         actionsList.appendChild(editBtn);
         actionsList.appendChild(deleteBtn);
-        actionsList.appendChild(lineBreak)
-    }
+        actionsList.appendChild(lineBreak);
+      }
 
-    function enableEditMode(studentItem,fatherItem){
-      isEditMode = true;
-      currentStudentItem = studentItem;
-      currentFatherItem = fatherItem;
+      function enableEditMode(studentItem, fatherItem) {
+        isEditMode = true;
+        currentStudentItem = studentItem;
+        currentFatherItem = fatherItem;
 
-      studentInput.value = studentItem.textContent;
-      fatherInput.value = fatherItem.textContent;
-      submitBtn.textContent = "save changes"
-    }
+        studentInput.value = studentItem.textContent;
+        fatherInput.value = fatherItem.textContent;
+        submitBtn.textContent = "save changes";
+      }
 
-    function updateRecord(studentValue,fatherValue){
-
-      currentStudentItem.textContent = studentValue;
-      currentFatherItem.textContent = fatherValue;
-      resetEditMode();
-    }
-
-    function resetEditMode(){
-      isEditMode = false;
-      currentFatherItem = null;
-      currentStudentItem = null;
-      submitBtn.textContent = "Add";
-      clearInputs();
-    }
-
-    function clearInputs(){
-      studentInput.value = "";
-      fatherInput.value = "";
-    }
-
-
-    function deleteRecord(studentItem,fatherItem,deleteBtn,editBtn,lineBreak){
-      if(isEditMode && studentItem == currentStudentItem){
+      function updateRecord(studentValue, fatherValue) {
+        currentStudentItem.textContent = studentValue;
+        currentFatherItem.textContent = fatherValue;
         resetEditMode();
       }
 
-      studentList.removeChild(studentItem);
-      fatherList.removeChild(fatherItem);
+      function resetEditMode() {
+        isEditMode = false;
+        currentFatherItem = null;
+        currentStudentItem = null;
+        submitBtn.textContent = "Add";
+        clearInputs();
+      }
 
-      actionsList.removeChild(editBtn);
-      actionsList.removeChild(deleteBtn);
-      actionsList.removeChild(lineBreak);
+      function clearInputs() {
+        studentInput.value = "";
+        fatherInput.value = "";
+      }
 
-    }
-  </script>
-</body>
+      function deleteRecord(
+        studentItem,
+        fatherItem,
+        deleteBtn,
+        editBtn,
+        lineBreak,
+      ) {
+        if (isEditMode && studentItem == currentStudentItem) {
+          resetEditMode();
+        }
+
+        studentList.removeChild(studentItem);
+        fatherList.removeChild(fatherItem);
+
+        actionsList.removeChild(editBtn);
+        actionsList.removeChild(deleteBtn);
+        actionsList.removeChild(lineBreak);
+      }
+    </script>
+  </body>
 </html>
