@@ -7,82 +7,6 @@
   </head>
   <body>
     <!-- student-management-system -->
-    <main>
-      <section>
-        <div>
-          <label for="studentInput">Name</label>
-          <input type="text" id="studentInput" />
-        </div>
-
-        <div>
-          <label for="fatherInput">Father Name</label>
-          <input type="text" id="fatherInput" />
-        </div>
-
-        <button id="submitBtn">Add</button>
-      </section>
-
-      <section style="display: flex; gap: 30px">
-        <div>
-          <h2>Student Names</h2>
-          <ul id="studentList"></ul>
-        </div>
-
-        <div>
-          <h2>Father Names</h2>
-          <ul id="fatherList"></ul>
-        </div>
-
-        <div>
-          <h2>Actions</h2>
-          <ul id="actionsList"></ul>
-        </div>
-      </section>
-    </main>
-
-    <script>
-      const studentInput = document.getElementById("studentInput");
-      const fatherInput = document.getElementById("fatherInput");
-      const submitBtn = document.getElementById("submitBtn");
-      const studentList = document.getElementById("studentList");
-      const fatherList = document.getElementById("fatherList");
-      const actionsList = document.getElementById("actionsList");
-
-      let isEditMode = false;
-      let currentStudentItem = null;
-      let currentFatherItem = null;
-
-      submitBtn.addEventListener("click", handleSubmit);
-
-      function handleSubmit() {
-        let studentValue = studentInput.value.trim();
-        let fatherValue = fatherInput.value.trim();
-
-        let hasEmptyField = !studentValue || !fatherValue;
-        if (hasEmptyField) {
-          alert("input fields cannot be empty");
-          return;
-        }
-
-        const regex = /^[a-zA-Z]+$/;
-        if (!regex.test(studentValue) || !regex.test(fatherValue)) {
-          alert("only enlgish letters are allowed.");
-          return;
-        }
-
-        if (isEditMode) {
-          updateRecord(studentValue, fatherValue);
-        } else {
-          createRecord(studentValue, fatherValue);
-        }
-
-        clearInputs();
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Test</title>
-</head>
-<body>
   <main>
     <section>
       <div>
@@ -219,18 +143,6 @@
     }
 
 
-    function deleteRecord(studentItem,fatherItem,deleteBtn,editBtn,lineBreak){
-      if(isEditMode && studentItem == currentStudentItem){
-        resetEditMode();
-      }
-
-      studentList.removeChild(studentItem);
-      fatherList.removeChild(fatherItem);
-
-      actionsList.removeChild(editBtn);
-      actionsList.removeChild(deleteBtn);
-      actionsList.removeChild(lineBreak);
-
       function deleteRecord(
         studentItem,
         fatherItem,
@@ -256,10 +168,8 @@
           console.log("deletion cancelled");
         }
       }
-    </script>
-  </body>
-</html>
-    }
+    
+
   </script>
 </body>
 </html>
