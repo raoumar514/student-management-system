@@ -34,7 +34,7 @@
   <body>
     <!-- student-management-system -->
     <main>
-      <section>
+      <section id="input_section">
         <div>
           <label for="studentInput">Name</label>
           <input type="text" id="studentInput" placeholder="write your name" />
@@ -69,6 +69,9 @@
       let currentStudentItem = null;
       let currentFatherItem = null;
       let isItemList = true;
+
+      let cancel_btn = document.createElement("button");
+      cancel_btn.textContent = "cancel";
 
       submitBtn.addEventListener("click", handleSubmit);
 
@@ -152,8 +155,6 @@
        
         studentItem.appendChild(container);
         
-        
-        
       }
 
       function enableEditMode(student_name,father_name) {
@@ -163,11 +164,22 @@
         studentInput.value = student_name.textContent;
         fatherInput.value = father_name.textContent;
         submitBtn.textContent = "save changes";
+        let input_section = document.getElementById("input_section");
+        input_section.appendChild(cancel_btn);
+        cancel_btn.addEventListener("click", ()=>{
+          cancelButton();
+        })
+      }
+
+      function cancelButton(){
+        cancel_btn.remove();
+        resetEditMode();
       }
 
       function updateRecord(studentValue, fatherValue) {
         currentStudentItem.textContent = studentValue;
         currentFatherItem.textContent = fatherValue;
+        cancel_btn.remove();
         
         resetEditMode();
       }
@@ -199,11 +211,13 @@
           const isDeletingSameItem = isEditMode && student_name == currentStudentItem;
           if (isDeletingSameItem) {
             resetEditMode();
+            cancel_btn.remove();
           }
 
           
 
           studentList.removeChild(studentItem);
+          
           
         } else {
           console.log("deletion cancelled");
