@@ -5,58 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Test</title>
 
-    <style>
-      li{
-        display: flex;
-      }
-
-      li h2{
-        margin-left: 30px;
-      }
-      .container{
-        display: flex;
-        gap: 30px;
-        margin-left: 30px;
-      }
-
-      li .edit_btn{
-          margin: 30px;
-
-      }
-      li .del_btn{
-        margin: 30px 10px;
-      }
-
-
-      
-    </style>
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <!-- student-management-system -->
-    <main>
-      <section id="input_section">
-        <div>
-          <label for="studentInput">Name</label>
-          <input type="text" id="studentInput" placeholder="write your name" />
+
+  <body class="bg-gray-100 p-6 font-sans">
+
+    <main class="max-w-3xl mx-auto">
+
+      <!-- INPUT SECTION -->
+      <section id="input_section" class="bg-white p-4 rounded shadow mb-6 space-y-3">
+
+        <div class="flex flex-col">
+          <label for="studentInput" class="text-sm font-medium">Name</label>
+          <input type="text" id="studentInput"
+            class="border p-2 rounded focus:outline-none focus:ring"
+            placeholder="write your name" />
         </div>
 
-        <div>
-          <label for="fatherInput">Father Name</label>
-          <input
-            type="text"
-            id="fatherInput"
-            placeholder="write your father name"
-          />
+        <div class="flex flex-col">
+          <label for="fatherInput" class="text-sm font-medium">Father Name</label>
+          <input type="text" id="fatherInput"
+            class="border p-2 rounded focus:outline-none focus:ring"
+            placeholder="write your father name" />
         </div>
 
-        <button id="submitBtn">Add</button>
+        <button id="submitBtn"
+          class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+          Add
+        </button>
+
       </section>
 
-      <section style="display: flex; gap: 30px">
-        <div>
-          <ul id="studentList"></ul>
-        </div>
+      <!-- LIST -->
+      <section class="bg-white p-4 rounded shadow">
+        <ul id="studentList" class="space-y-2"></ul>
       </section>
+
     </main>
 
     <script>
@@ -68,20 +53,19 @@
       let isEditMode = false;
       let currentStudentItem = null;
       let currentFatherItem = null;
-      let isItemList = true;
 
       let cancel_btn = document.createElement("button");
       cancel_btn.textContent = "cancel";
+      cancel_btn.className =
+        "ml-3 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600";
 
       submitBtn.addEventListener("click", handleSubmit);
 
       function handleSubmit() {
-        
         let studentValue = studentInput.value.trim();
         let fatherValue = fatherInput.value.trim();
 
-        let hasEmptyField = !studentValue || !fatherValue;
-        if (hasEmptyField) {
+        if (!studentValue || !fatherValue) {
           alert("input fields cannot be empty");
           return;
         }
@@ -98,80 +82,83 @@
           createRecord(studentValue, fatherValue);
         }
 
-        
-
         clearInputs();
       }
 
-        let std_head = document.createElement("h2");
-        std_head.textContent = "Student";
-        let father_head = document.createElement("h2");
-        father_head.textContent = "Father";
-        let head = document.createElement("div");
-        head.appendChild(std_head);
-        head.appendChild(father_head);
+      let std_head = document.createElement("h2");
+      std_head.textContent = "Student";
+      std_head.className = "font-bold";
 
+      let father_head = document.createElement("h2");
+      father_head.textContent = "Father";
+      father_head.className = "font-bold";
 
-
+      let head = document.createElement("div");
+      head.className = "flex gap-10 mb-2";
+      head.appendChild(std_head);
+      head.appendChild(father_head);
 
       function createRecord(studentValue, fatherValue) {
-        
-        
-
         let studentItem = document.createElement("li");
-        
-        let editBtn = document.createElement("button");
-        editBtn.textContent = "Edit";
-        editBtn.className = "edit_btn";
-        let deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "delete";
-        deleteBtn.className = "del_btn";
+        studentItem.className =
+          "flex items-center justify-between bg-gray-50 p-3 rounded";
+
         let student_name = document.createElement("p");
         student_name.textContent = studentValue;
+
         let father_name = document.createElement("p");
         father_name.textContent = fatherValue;
+
+        let editBtn = document.createElement("button");
+        editBtn.textContent = "Edit";
+        editBtn.className =
+          "bg-yellow-400 px-3 py-1 rounded hover:bg-yellow-500";
+
+        let deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.className =
+          "bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 ml-2";
+
         let container = document.createElement("div");
-        container.className = "container";
-        
+        container.className = "flex items-center gap-6";
 
         editBtn.addEventListener("click", () => {
-          enableEditMode(student_name,father_name);
+          enableEditMode(student_name, father_name);
         });
 
         deleteBtn.addEventListener("click", () => {
-          deleteRecord(studentItem,student_name);
+          deleteRecord(studentItem, student_name);
         });
-        
-        if(studentList.querySelectorAll("li").length == 0){
-      studentList.appendChild(head); 
-}
 
-        
-        studentList.appendChild(studentItem);  
-         container.appendChild(student_name);
-        container.appendChild(father_name);      
+        if (studentList.querySelectorAll("li").length == 0) {
+          studentList.appendChild(head);
+        }
+
+        container.appendChild(student_name);
+        container.appendChild(father_name);
         container.appendChild(editBtn);
         container.appendChild(deleteBtn);
-       
+
         studentItem.appendChild(container);
-        
+        studentList.appendChild(studentItem);
       }
 
-      function enableEditMode(student_name,father_name) {
+      function enableEditMode(student_name, father_name) {
         isEditMode = true;
         currentStudentItem = student_name;
         currentFatherItem = father_name;
+
         studentInput.value = student_name.textContent;
         fatherInput.value = father_name.textContent;
-        submitBtn.textContent = "save changes";
-        let input_section = document.getElementById("input_section");
-        input_section.appendChild(cancel_btn);
-        cancel_btn.addEventListener("click", ()=>{
-          cancelButton();
-        })
+
+        submitBtn.textContent = "Save Changes";
+
+        document.getElementById("input_section").appendChild(cancel_btn);
+
+        cancel_btn.onclick = cancelButton;
       }
 
-      function cancelButton(){
+      function cancelButton() {
         cancel_btn.remove();
         resetEditMode();
       }
@@ -179,8 +166,8 @@
       function updateRecord(studentValue, fatherValue) {
         currentStudentItem.textContent = studentValue;
         currentFatherItem.textContent = fatherValue;
+
         cancel_btn.remove();
-        
         resetEditMode();
       }
 
@@ -198,40 +185,24 @@
         fatherInput.value = "";
       }
 
+      function deleteRecord(studentItem, student_name) {
+        const confirmed = window.confirm("Are you sure you want to delete this?");
 
-      function deleteRecord(studentItem,student_name
-      ) {
-        const confirmed = window.confirm(
-          "Are you sure you want to delete this?",
-        );
-        
-
-        
         if (confirmed) {
-          const isDeletingSameItem = isEditMode && student_name == currentStudentItem;
+          const isDeletingSameItem =
+            isEditMode && student_name == currentStudentItem;
+
           if (isDeletingSameItem) {
             resetEditMode();
             cancel_btn.remove();
           }
 
-          
-
           studentList.removeChild(studentItem);
-          
-          
-        } else {
-          console.log("deletion cancelled");
         }
 
-        
-
-        if(studentList.querySelectorAll("li").length == 0){
+        if (studentList.querySelectorAll("li").length == 0) {
           head.remove();
-        };
-
-        console.log(studentList.querySelectorAll("li").length)
-
-    
+        }
       }
     </script>
   </body>
